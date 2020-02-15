@@ -19,5 +19,14 @@ $router->get('/', function () use ($router) {
 $router->group(["prefix" => "api"], function () use ($router) {
     $router->get('/tickets/all', ['uses' => 'TicketsController@all']);
     $router->get('/tickets/{id}', ['uses' => 'TicketsController@byAgentId']);
+    $router->get('/tickets', ['uses' => 'TicketsController@byAgentIdAndStatus']);
+});
+
+//a group of all agents end-points
+$router->group(["prefix" => "api"], function () use ($router) {
+    $router->get('/agents/all', ['uses' => 'AgentsController@all']);
+    $router->post('/agents/create', ['uses' => 'AgentsController@create']);
+    $router->get('/agents/find/{telephone}', ['uses' => 'AgentsController@find']);
+    $router->get('/agents/reset/{telephone}', ['uses' => 'AgentsController@resetPassword']);
 
 });
