@@ -28,5 +28,5 @@ $router->group(["prefix" => "api"], function () use ($router) {
     $router->post('/agents/create', ['uses' => 'AgentsController@create']);
     $router->get('/agents/find/{telephone}', ['uses' => 'AgentsController@find']);
     $router->get('/agents/reset/{telephone}', ['uses' => 'AgentsController@resetPassword']);
-
+    $router->post('/agents/login', ['uses' => 'AgentsController@login']);
 });

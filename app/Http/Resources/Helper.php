@@ -98,6 +98,33 @@ class Helper
         }
     }
 
+    /**
+     * Validate login reuest.
+     * @param  Illuminate\Http\Request $request containing credentials details
+     * @return array
+     */
+
+    public function loginRequestValidator($request)
+    {
+        try {
+
+            $validator = \Validator::make($request->all(), [
+                "telephone_number" => "required",
+                "PIN" => "required",
+            ])->validate();
+
+            return null;
+
+        } catch (ValidationException $e) {
+            $arr = [];
+            foreach ($e->errors() as $key => $value) {
+                $arr[$key] = $value[0];
+            }
+
+            return $arr;
+        }
+    }
+
     //generate hash password
 
     public function generatePIN()
@@ -116,6 +143,23 @@ class Helper
         $sms->sent = 0;
         $sms->created_At = $sms->updated_At = date("Y-m-d H:i:s");
         $sms->save();
+    }
+
+    /**
+     * Process Login.
+     * @param  telephone
+     * @param  PIN
+     * @return bool
+     */
+
+    public function loginProcessor($agent, $PIN)
+    {
+        if (password_verify($PIN, $agent->PIN)) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public static function instantiate()

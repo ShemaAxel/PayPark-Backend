@@ -179,4 +179,82 @@ class AgentsController extends Controller
 
     }
 
+    /**
+     * Agents Login end point
+     *
+     * @return Json
+     */
+    public function login(Request $request)
+    {
+        try {
+
+            Log::info('Access Agent-Login End Point');
+            //validate request
+            $notValid = $this->helpers->loginRequestValidator($request);
+
+            if ($notValid) {
+                Log::error("Validation Error.");
+                return response()->json([
+                    "status" => [
+                        "success" => false,
+                        "message" => "invalid request",
+                    ],
+                    "data" => [
+                        "meta" => $notValid,
+                    ],
+                ], 200);
+            }
+
+            Log::info('Searching agent.');
+
+            $agent = $this->helpers->find($request->telephone_number);
+            if ($agent) {
+
+                Log::info('Validating credentials.');
+
+                $login = $this->helpers->loginProcessor($agent, $request->PIN);
+
+                if ($login) {
+                    return response()->json([
+                        "status" => [
+                            "success" => $login,
+                            "message" => "login",
+                        ],
+                        "data" => [
+                            "meta" => $agent,
+                        ],
+                    ], 200);
+                } else {
+                    return response()->json([
+                        "status" => [
+                            "success" => $login,
+                            "message" => "login",
+                        ],
+                        "data" => [
+                            "meta" => null,
+                        ],
+                    ], 200);
+                }
+
+            } else {
+
+                Log::error('Agent doesnt exist.');
+                return response()->json([
+                    "status" => [
+                        "success" => false,
+                        "message" => "login",
+                    ],
+                    "data" => [
+                        "meta" => null,
+                    ],
+                ], 200);
+            }
+
+        } catch (Exception $ex) {
+
+            Log::error("Application . Exception : " . $ex->getMessage());
+            return response()->json($ex->getMessage(), 500);
+        }
+    }
+
 }
