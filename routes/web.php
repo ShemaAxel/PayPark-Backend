@@ -11,9 +11,9 @@
 |
  */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+// $router->get('/', function () use ($router) {
+//     return $router->app->version();
+// });
 
 //a group of all tickets end-points
 $router->group(["prefix" => "api"], function () use ($router) {
