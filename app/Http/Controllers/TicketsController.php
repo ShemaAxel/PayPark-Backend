@@ -85,11 +85,13 @@ class TicketsController extends Controller
 
             Log::info('registering a new Ticket');
 
+            //add amount = 0;
             $ticket = new Ticket;
             $ticket->number_plate = $request->plateNumber;
             $ticket->location_id = 1;
             $ticket->agent_id= $request->agent_id;
             $ticket->status = "IN_PARKING";
+            $ticket->Amount = 0;
             $ticket->date_time_out = null;
             $ticket->product_id = 1;//
             $ticket->created_At =$ticket->updated_At= date("Y-m-d H:i:s");
