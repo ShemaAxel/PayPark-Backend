@@ -19,11 +19,9 @@ class TicketsController extends Controller
 
             //search ticket
             Log::info('Searching ticket');
-            $ticket = Ticket::where([
-                ["ticket_no", "=", $ticketID],
-            ])->get();
+            $ticket = Ticket::find($ticketID);
 
-            if($ticketID){
+            if($ticket){
                 //update with amount
                 Log::info('Ticket found');
 
@@ -46,9 +44,6 @@ class TicketsController extends Controller
                     ],
                 ], 200);  
             }
-    
-
-
         }catch (Exception $ex) {
             Log::error("Application . Exception : " . $ex->getMessage());
 
@@ -62,9 +57,7 @@ class TicketsController extends Controller
 
             Log::info('removing car from parking');
 
-            $ticket = Ticket::where([
-                ["ticket_no", "=", $ticketID],
-            ])->get();
+            $ticket = Ticket::find($ticketID);
 
             Log::info('Updating ticket to paid');
 
