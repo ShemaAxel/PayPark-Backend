@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb5
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Mar 07, 2020 at 01:42 PM
--- Server version: 5.7.28-0ubuntu0.18.04.4
--- PHP Version: 7.2.24-0ubuntu0.18.04.1
+-- Host: 127.0.0.1
+-- Generation Time: Mar 10, 2020 at 10:30 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -30,7 +32,7 @@ CREATE TABLE `pp_agent_location` (
   `record_id` bigint(20) NOT NULL,
   `avenue_id` int(11) NOT NULL,
   `agent_id` bigint(20) NOT NULL,
-  `start_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `start_date` datetime NOT NULL DEFAULT current_timestamp(),
   `end_date` datetime DEFAULT NULL,
   `agent_loc_status` enum('Active','Closed') NOT NULL DEFAULT 'Active',
   `closed_by` bigint(20) NOT NULL
@@ -56,7 +58,7 @@ INSERT INTO `pp_agent_location` (`record_id`, `avenue_id`, `agent_id`, `start_da
 CREATE TABLE `pp_car_plates` (
   `plate_num` varchar(100) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `registration_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `registration_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -112,8 +114,8 @@ CREATE TABLE `pp_parking_agents` (
   `nid_number` varchar(255) NOT NULL,
   `agent_status` enum('Active','Inactive') NOT NULL DEFAULT 'Active',
   `PIN` varchar(100) NOT NULL,
-  `created_At` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_At` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_At` timestamp NULL DEFAULT current_timestamp(),
+  `updated_At` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -184,40 +186,41 @@ CREATE TABLE `pp_parking_tickets` (
   `location_id` int(11) NOT NULL,
   `agent_id` int(11) NOT NULL,
   `status` enum('IN_PARKING','PAID','OUT_PARKING','') NOT NULL DEFAULT 'IN_PARKING',
+  `Amount` int(11) DEFAULT 0,
   `date_time_out` datetime DEFAULT NULL,
   `product_id` int(11) NOT NULL,
-  `created_At` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_At` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_At` timestamp NULL DEFAULT current_timestamp(),
+  `updated_At` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `pp_parking_tickets`
 --
 
-INSERT INTO `pp_parking_tickets` (`ticket_no`, `number_plate`, `location_id`, `agent_id`, `status`, `date_time_out`, `product_id`, `created_At`, `updated_At`) VALUES
-(1, '1090494090', 6, 1, 'PAID', '2020-01-08 17:48:08', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(2, '10049000', 5, 1, 'PAID', '2019-10-18 19:21:07', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(3, '90784578', 7, 0, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(4, 'RAD545V', 5, 1, 'OUT_PARKING', '2019-10-18 19:21:39', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(5, '8987', 5, 1, 'PAID', '2019-10-18 18:11:03', 2, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(6, 'RAC#$%Z', 11, 1, 'PAID', '2019-11-15 10:37:09', 2, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(7, 'RAC500Z', 7, 2, 'PAID', '2020-01-05 21:22:55', 3, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(8, 'RAC500Z', 5, 2, 'IN_PARKING', NULL, 2, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(9, 'RAC500Z', 5, 2, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(10, 'RAC500Z', 5, 2, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(11, 'RAC500Z', 5, 2, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(12, 'RAC500Z', 5, 2, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(13, 'RAC500Z', 5, 2, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(14, 'RAC247A', 5, 1, 'PAID', NULL, 1, '2020-02-08 16:07:20', '2020-02-15 10:27:41'),
-(15, 'RAC600Z', 5, 2, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(16, 'RAC500Z', 6, 2, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(17, 'RAC500G', 6, 2, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(18, 'RAC500Y', 1, 2, 'PAID', '2020-01-10 13:48:12', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(19, 'RAC500A', 14, 1, 'PAID', '2020-01-10 13:47:18', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(20, 'RAC500N', 19, 2, 'PAID', '2020-01-13 13:34:30', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(21, 'RAC247E', 5, 1, 'PAID', '2020-02-03 17:47:25', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(22, 'RAA001A', 5, 1, 'OUT_PARKING', '2020-02-04 15:34:20', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
-(23, 'RAA001A', 5, 1, 'IN_PARKING', NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05');
+INSERT INTO `pp_parking_tickets` (`ticket_no`, `number_plate`, `location_id`, `agent_id`, `status`, `Amount`, `date_time_out`, `product_id`, `created_At`, `updated_At`) VALUES
+(1, '1090494090', 6, 1, 'PAID', 0, '2020-01-08 17:48:08', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(2, '10049000', 5, 1, 'PAID', 0, '2019-10-18 19:21:07', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(3, '90784578', 7, 0, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(4, 'RAD545V', 5, 1, 'OUT_PARKING', 0, '2019-10-18 19:21:39', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(5, '8987', 5, 1, 'PAID', 0, '2019-10-18 18:11:03', 2, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(6, 'RAC#$%Z', 11, 1, 'PAID', 0, '2019-11-15 10:37:09', 2, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(7, 'RAC500Z', 7, 2, 'PAID', 0, '2020-01-05 21:22:55', 3, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(8, 'RAC500Z', 5, 2, 'IN_PARKING', 0, NULL, 2, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(9, 'RAC500Z', 5, 2, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(10, 'RAC500Z', 5, 2, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(11, 'RAC500Z', 5, 2, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(12, 'RAC500Z', 5, 2, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(13, 'RAC500Z', 5, 2, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(14, 'RAC247A', 5, 1, 'PAID', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-15 10:27:41'),
+(15, 'RAC600Z', 5, 2, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(16, 'RAC500Z', 6, 2, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(17, 'RAC500G', 6, 2, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(18, 'RAC500Y', 1, 2, 'PAID', 0, '2020-01-10 13:48:12', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(19, 'RAC500A', 14, 1, 'PAID', 0, '2020-01-10 13:47:18', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(20, 'RAC500N', 19, 2, 'PAID', 0, '2020-01-13 13:34:30', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(21, 'RAC247E', 5, 1, 'PAID', 0, '2020-02-03 17:47:25', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(22, 'RAA001A', 5, 1, 'OUT_PARKING', 0, '2020-02-04 15:34:20', 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05'),
+(23, 'RAA001A', 5, 1, 'IN_PARKING', 0, NULL, 1, '2020-02-08 16:07:20', '2020-02-08 18:08:05');
 
 -- --------------------------------------------------------
 
@@ -230,8 +233,8 @@ CREATE TABLE `pp_sms` (
   `telephone_number` varchar(25) NOT NULL,
   `body` varchar(100) NOT NULL,
   `sent` int(11) NOT NULL,
-  `created_At` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_At` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_At` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_At` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -256,7 +259,7 @@ CREATE TABLE `pp_supervisor_location` (
   `record_id` int(11) NOT NULL,
   `quartier_id` int(11) NOT NULL,
   `supervisor_id` int(11) NOT NULL,
-  `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `start_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `end_date` timestamp NULL DEFAULT NULL,
   `agent_loc_status` varchar(20) NOT NULL DEFAULT 'Active'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -697,8 +700,8 @@ CREATE TABLE `users` (
   `firstname` varchar(55) NOT NULL,
   `lastname` varchar(55) NOT NULL,
   `type` varchar(50) NOT NULL DEFAULT 'CUSTOMER',
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL DEFAULT current_timestamp(),
+  `modified` timestamp NOT NULL DEFAULT current_timestamp(),
   `password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -796,46 +799,62 @@ ALTER TABLE `users`
 --
 ALTER TABLE `pp_agent_location`
   MODIFY `record_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
 --
 -- AUTO_INCREMENT for table `pp_locations`
 --
 ALTER TABLE `pp_locations`
   MODIFY `location_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
 --
 -- AUTO_INCREMENT for table `pp_parking_agents`
 --
 ALTER TABLE `pp_parking_agents`
   MODIFY `agent_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
 --
 -- AUTO_INCREMENT for table `pp_parking_products`
 --
 ALTER TABLE `pp_parking_products`
   MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT for table `pp_parking_supervisors`
 --
 ALTER TABLE `pp_parking_supervisors`
   MODIFY `supervisor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `pp_parking_tickets`
+--
+ALTER TABLE `pp_parking_tickets`
+  MODIFY `ticket_no` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
 --
 -- AUTO_INCREMENT for table `pp_sms`
 --
 ALTER TABLE `pp_sms`
   MODIFY `smsId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
 --
 -- AUTO_INCREMENT for table `pp_supervisor_location`
 --
 ALTER TABLE `pp_supervisor_location`
   MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `sm_geolocation`
 --
 ALTER TABLE `sm_geolocation`
   MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=393;
+
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

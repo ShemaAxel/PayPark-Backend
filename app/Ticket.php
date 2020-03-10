@@ -22,7 +22,7 @@ class Ticket extends Model
      * @var array
      */
     protected $fillable = [
-        'ticket_no', 'number_plate', 'location_id', 'agent_id', 'status', 'date_time_out', 'product_id',
+        'ticket_no', 'number_plate', 'location_id', 'agent_id', 'status', 'date_time_out', 'product_id','updated_At','created_At',
     ];
 
 }

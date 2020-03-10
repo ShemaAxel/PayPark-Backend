@@ -8,6 +8,116 @@ use Illuminate\Support\Facades\Log;
 
 class TicketsController extends Controller
 {
+
+
+    public function payment(Request $request){
+        try{
+            Log::info('Capturing payment');
+
+            //get ticketId
+            $ticketID = $request->ticketID;
+
+            //search ticket
+            Log::info('Searching ticket');
+            $ticket = Ticket::where([
+                ["ticket_no", "=", $ticketID],
+            ])->get();
+
+            if($ticketID){
+                //update with amount
+                Log::info('Ticket found');
+
+                $ticket->Amount = $request->amount;
+                $ticket->save();
+
+                return response()->json([
+                    "responseDescription" => "Payment Captured",
+                    "meta" => [
+                        "content" => $ticket,
+                    ],
+                ], 200);
+            }else{
+                Log::info('Ticket not found');
+
+                return response()->json([
+                    "responseDescription" => "Ticket not found",
+                    "meta" => [
+                        "content" => null,
+                    ],
+                ], 200);  
+            }
+    
+
+
+        }catch (Exception $ex) {
+            Log::error("Application . Exception : " . $ex->getMessage());
+
+            return response()->json($ex->getMessage(), 500);
+        }   
+    }
+
+
+    public function remove($ticketID){
+        try{
+
+            Log::info('removing car from parking');
+
+            $ticket = Ticket::where([
+                ["ticket_no", "=", $ticketID],
+            ])->get();
+
+            Log::info('Updating ticket to paid');
+
+            $ticket->status="PAID";
+            $ticket->save();
+
+            return response()->json([
+                "responseDescription" => "Car Removed, Ticket Updated",
+                "meta" => [
+                    "content" => $ticket,
+                ],
+            ], 200);
+
+        }catch (Exception $ex) {
+            Log::error("Application . Exception : " . $ex->getMessage());
+
+            return response()->json($ex->getMessage(), 500);
+        }
+    }
+
+
+
+    public function create(Request $request){
+        try{
+
+            Log::info('registering a new Ticket');
+
+            $ticket = new Ticket;
+            $ticket->number_plate = $request->plateNumber;
+            $ticket->location_id = 1;
+            $ticket->agent_id= $request->agent_id;
+            $ticket->status = "IN_PARKING";
+            $ticket->date_time_out = null;
+            $ticket->product_id = 1;//
+            $ticket->created_At =$ticket->updated_At= date("Y-m-d H:i:s");
+            $ticket->save();
+
+            Log::info('Saved and preparing response');
+
+            return response()->json([
+                "responseDescription" => "Ticket Created",
+                "meta" => [
+                    "content" => $ticket,
+                ],
+            ], 200);
+
+        }catch (Exception $ex) {
+            Log::error("Application . Exception : " . $ex->getMessage());
+
+            return response()->json($ex->getMessage(), 500);
+        }
+    }
+
     /**
      * View all tickets
      *

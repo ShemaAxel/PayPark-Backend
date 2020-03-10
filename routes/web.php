@@ -11,15 +11,21 @@
 |
  */
 
-// $router->get('/', function () use ($router) {
-//     return $router->app->version();
-// });
+$router->get('/', function () use ($router) {
+    return $router->app->version();
+});
 
 //a group of all tickets end-points
 $router->group(["prefix" => "api"], function () use ($router) {
     $router->get('/tickets/all', ['uses' => 'TicketsController@all']);
     $router->get('/tickets/{id}', ['uses' => 'TicketsController@byAgentId']);
     $router->get('/tickets', ['uses' => 'TicketsController@byAgentIdAndStatus']);
+    $router->post('/tickets/create', ['uses' => 'TicketsController@create']);
+    //add
+    $router->get('/tickets/remove/{ticketID}', ['uses' => 'TicketsController@remove']);
+    //remove
+    $router->post('/tickets/payment', ['uses' => 'TicketsController@payment']);
+    //payment
 });
 
 //a group of all agents end-points
@@ -29,4 +35,5 @@ $router->group(["prefix" => "api"], function () use ($router) {
     $router->get('/agents/find/{telephone}', ['uses' => 'AgentsController@find']);
     $router->get('/agents/reset/{telephone}', ['uses' => 'AgentsController@resetPassword']);
     $router->post('/agents/login', ['uses' => 'AgentsController@login']);
+    //payment
 });
